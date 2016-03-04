@@ -1,5 +1,6 @@
 package rs.spaceinvade.pingagent.run;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -7,8 +8,8 @@ import java.util.Properties;
  * @author Landry Soules
  *
  */
-public interface PingManager {
+public interface ConnectionSupervisor {
 
-	
+	public String runCommand() throws IOException;
 
 }
