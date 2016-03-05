@@ -8,9 +8,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class PingManagerTCP implements ConnectionSupervisor {
+import rs.spaceinvade.pingagent.config.ConfigManager;
+
+public class PingManagerTCP extends SimpleConnectionSupervisor {
 
 	private static Logger log = Logger.getLogger(PingManagerTCP.class.getName());
+	
+	public PingManagerTCP(String host) {
+		super(host);
+	}
 
 	@Override
 	public String runCommand() throws IOException {
@@ -38,6 +44,16 @@ public class PingManagerTCP implements ConnectionSupervisor {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public void run() {
+		try {
+			runCommand();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

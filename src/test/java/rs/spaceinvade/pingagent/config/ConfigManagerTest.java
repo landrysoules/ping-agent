@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import rs.spaceinvade.pingagent.exception.PingAgentException;
 
 public class ConfigManagerTest {
-	private static Logger logger = Logger.getLogger("ConfigManagerTest");
+	private static Logger logger = Logger.getLogger(ConfigManagerTest.class.getName());
 
 	@Test
 	public void cliParamsOverridesPropsFile() {
@@ -34,6 +34,15 @@ public class ConfigManagerTest {
 		ConfigManager configManager = spy(ConfigManagerImpl.class);
 		doReturn(getClass().getResourceAsStream("config.test.properties")).when(configManager).getConfigFile();
 		configManager.loadConfig();
+	}
+	
+	@Test
+	public void transformCorrectlyRawMainParamsToMap(){
+		String[]rawParams = new String[]{"log.file=/home/pingmanager/pingmanager.log","log.level=warn"};
+		ConfigManager configManager = new ConfigManagerImpl(rawParams);
+		Map<String, String> processedParameters = configManager.processMainArgs(rawParams);
+		assertEquals("/home/pingmanager/pingmanager.log", processedParameters.get("log.file"));
+		assertEquals("warn", processedParameters.get("log.level"));
 	}
 
 }

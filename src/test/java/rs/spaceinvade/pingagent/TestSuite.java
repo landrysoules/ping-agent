@@ -4,15 +4,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import rs.spaceinvade.pingagent.config.ConfigManagerTest;
-import rs.spaceinvade.pingagent.run.PingManagerICMPTest;
-import rs.spaceinvade.pingagent.run.PingManagerTCPTest;
-import rs.spaceinvade.pingagent.run.RouteManagerTest;
+import rs.spaceinvade.pingagent.run.CommandLauncherTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-	ConfigManagerTest.class, 
-	PingManagerICMPTest.class, 
-	PingManagerTCPTest.class,
-	RouteManagerTest.class})
+@Suite.SuiteClasses({ ConfigManagerTest.class, CommandLauncherTest.class })
+
 public class TestSuite {
 }

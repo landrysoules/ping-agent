@@ -19,6 +19,10 @@ public class ConfigManagerImpl implements ConfigManager {
 	private String[] mandatoryProperties = new String[] { "hosts", "ping.icmp.interval", "ping.http.interval",
 			"trace.interval", "log.file", "log.level" };
 	private static Logger logger = Logger.getLogger(ConfigManagerImpl.class.getName());
+	/**
+	 * Raw String array parameters from program's main method
+	 */
+	private String[]mainArgs = null;
 
 	public ConfigManagerImpl() {
 
@@ -26,6 +30,11 @@ public class ConfigManagerImpl implements ConfigManager {
 
 	public ConfigManagerImpl(Map<String, String> cliParams) {
 		this.cliParams = cliParams;
+	}
+	
+	public ConfigManagerImpl(String[] mainArgs){
+		this.mainArgs = mainArgs;
+		cliParams = processMainArgs(mainArgs);
 	}
 
 	@Override
@@ -90,5 +99,25 @@ public class ConfigManagerImpl implements ConfigManager {
 	public InputStream getConfigFile() {
 		InputStream inputStream = App.class.getResourceAsStream("config.properties");
 		return inputStream;
+	}
+
+	@Override
+	public String[] getMainArgs() {
+		return mainArgs;
+	}
+
+	@Override
+	public void setMainArgs(String[] mainArgs) {
+		this.mainArgs = mainArgs;
+	}
+
+	@Override
+	public Map<String, String> processMainArgs(String[] mainArgs) {
+		Map<String,String> cliParams = new HashMap<>();
+		for(String arg:mainArgs){
+			String[]args = arg.split("=");
+			cliParams.put(args[0], args[1]);
+		}
+		return cliParams;
 	}
 }

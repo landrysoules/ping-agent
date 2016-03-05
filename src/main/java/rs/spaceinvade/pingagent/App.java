@@ -1,24 +1,31 @@
 package rs.spaceinvade.pingagent;
 
-import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import rs.spaceinvade.pingagent.run.ConnectionSupervisor;
-import rs.spaceinvade.pingagent.run.PingManagerICMP;
+import rs.spaceinvade.pingagent.config.ConfigManager;
+import rs.spaceinvade.pingagent.config.ConfigManagerImpl;
+import rs.spaceinvade.pingagent.exception.PingAgentException;
+import rs.spaceinvade.pingagent.run.Agent;
+import rs.spaceinvade.pingagent.run.PingAgent;
 
 /**
- * Hello world!
+ * PingAgent entry point.
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        ConnectionSupervisor pingManager = new PingManagerICMP(args);
+public class App {
+	
+	private static Logger logger = Logger.getLogger(App.class.getName());
+	
+	public static void main(String[] args) {
+		ConfigManager configManager = new ConfigManagerImpl(args);
 		try {
-			pingManager.runCommand();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			configManager.loadConfig();
+			Agent pingAgent = new PingAgent(configManager);
+			pingAgent.launchAllProcesses();
+		} catch (PingAgentException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
-    }
+		
+	}
 }

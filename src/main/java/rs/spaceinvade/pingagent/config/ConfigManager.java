@@ -19,6 +19,9 @@ public interface ConfigManager {
 	 */
 	public void loadConfig()throws PingAgentException;
 	
+	public String[] getMainArgs();
+	
+	public void setMainArgs(String[] mainArgs);
 
 	public Map<String, String> getCliParams();
 
@@ -31,6 +34,8 @@ public interface ConfigManager {
 	public void setProperties(Properties properties);
 	
 	public InputStream getConfigFile();
+	
+	public Map<String, String>  processMainArgs(String[]mainArgs);
 	
 	/**
 	 * Checks that all mandatory properties are present before the processes are launched.
