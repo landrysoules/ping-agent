@@ -1,12 +1,15 @@
 package rs.spaceinvade.pingagent.run;
 
-import rs.spaceinvade.pingagent.config.ConfigManager;
-
 public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor {
 
 	private String host;
+	
+	private String lastResult;
 
-	SimpleConnectionSupervisor(String host) {
+	private Agent callingAgent;
+
+	SimpleConnectionSupervisor(Agent callingAgent, String host) {
+		this.callingAgent = callingAgent;
 		this.host = host;
 	}
 
@@ -17,9 +20,34 @@ public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor
 	}
 
 	@Override
-	public void storeResult() {
-		// TODO Auto-generated method stub
+	public void setLastResult(String lastResult) {
+		this.lastResult = lastResult;
+	}
+	
+	@Override
+	public String getLastResult() {
+		return lastResult;
+		
+	}
 
+	@Override
+	public Agent getCallingAgent() {
+		return callingAgent;
+	}
+
+	@Override
+	public void setCallingAgent(Agent callingAgent) {
+		this.callingAgent = callingAgent;
+	}
+	
+	@Override
+	public String getHost() {
+		return host;
+	}
+
+	@Override
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 }

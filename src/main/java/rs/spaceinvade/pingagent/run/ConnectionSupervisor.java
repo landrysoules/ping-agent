@@ -1,9 +1,6 @@
 package rs.spaceinvade.pingagent.run;
 
 import java.io.IOException;
-import java.util.Properties;
-
-import rs.spaceinvade.pingagent.config.ConfigManager;
 
 /**
  * In charge of executign pinging operations.
@@ -20,11 +17,23 @@ public interface ConnectionSupervisor extends Runnable{
 	/**
 	 * Store result of last operation.
 	 */
-	public void storeResult();
+	public void setLastResult(String lastResult);
+	
+	public String getLastResult();
 	
 	/**
 	 * Send report.
 	 */
 	public void sendReport();
+
+	public Agent getCallingAgent();
+
+	void setCallingAgent(Agent callingAgent);
+
+	String getHost();
+
+	void setHost(String host);
+	
+	
 
 }

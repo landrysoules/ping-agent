@@ -5,15 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
-import rs.spaceinvade.pingagent.config.ConfigManager;
-import rs.spaceinvade.pingagent.config.ConfigManagerTest;
-
 public class CommandLauncher extends SimpleConnectionSupervisor {
 
 	private static Logger logger = Logger.getLogger(CommandLauncher.class.getName());
 	
-	public CommandLauncher(String host) {
-		super(host);
+	public CommandLauncher(Agent callingAgent, String host) {
+		super(callingAgent, host);
 	}
 
 	private ProcessBuilder processBuilder;

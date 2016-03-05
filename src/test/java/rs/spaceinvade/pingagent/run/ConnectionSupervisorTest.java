@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CommandLauncherTest {
+public class ConnectionSupervisorTest {
 
 	@Test
 	public void storageContainsLastResultForGivenHost() {

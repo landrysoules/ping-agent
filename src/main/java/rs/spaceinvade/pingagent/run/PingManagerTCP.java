@@ -8,14 +8,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import rs.spaceinvade.pingagent.config.ConfigManager;
-
 public class PingManagerTCP extends SimpleConnectionSupervisor {
 
 	private static Logger log = Logger.getLogger(PingManagerTCP.class.getName());
 	
-	public PingManagerTCP(String host) {
-		super(host);
+	public PingManagerTCP(Agent callingAgent,String host) {
+		super(callingAgent,host);
 	}
 
 	@Override
