@@ -2,6 +2,11 @@ package rs.spaceinvade.pingagent.run;
 
 import rs.spaceinvade.pingagent.config.ConfigManager;
 
+/**
+ * Launches the various processes.
+ * @author Landry Soules
+ *
+ */
 public interface Agent {
 
 	public ConfigManager getConfigManager();

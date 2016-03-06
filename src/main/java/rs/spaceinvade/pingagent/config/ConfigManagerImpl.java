@@ -12,12 +12,17 @@ import java.util.logging.Logger;
 import rs.spaceinvade.pingagent.App;
 import rs.spaceinvade.pingagent.exception.PingAgentException;
 
+/**
+ * Loads configuration, makes sure all required parameters are present (CLI parameters override those in configuration file).
+ * @author Landry Soules
+ *
+ */
 public class ConfigManagerImpl implements ConfigManager {
 
 	private Map<String, String> cliParams = new HashMap<String, String>();
 	private Properties properties = new Properties();
 	private String[] mandatoryProperties = new String[] { "hosts", "ping.icmp.interval", "ping.http.interval",
-			"trace.interval", "log.file", "log.level" };
+			"trace.interval", "log.file", "log.level", "ping.http.timeout", "ping.http.max.response.time" };
 	private static Logger logger = Logger.getLogger(ConfigManagerImpl.class.getName());
 	/**
 	 * Raw String array parameters from program's main method
@@ -38,6 +43,10 @@ public class ConfigManagerImpl implements ConfigManager {
 	}
 
 	@Override
+	/**
+	 * Loads configuration.<br>
+	 * The program interrupts if not every required properties are provided.
+	 */
 	public void loadConfig() throws PingAgentException {
 		InputStream inputStream = getConfigFile();
 		if (inputStream != null) {
@@ -84,6 +93,9 @@ public class ConfigManagerImpl implements ConfigManager {
 	}
 
 	@Override
+	/**
+	 * Checks that all mandatory properties are present.
+	 */
 	public List<String> checkProperties(String[] mandatoryProperties) {
 		Properties properties = getProperties();
 		List<String> missingProperties = new ArrayList<String>();
@@ -97,7 +109,7 @@ public class ConfigManagerImpl implements ConfigManager {
 
 	@Override
 	public InputStream getConfigFile() {
-		InputStream inputStream = App.class.getResourceAsStream("config.properties");
+		InputStream inputStream = App.class.getClassLoader().getResourceAsStream("config.properties");
 		return inputStream;
 	}
 
@@ -112,6 +124,9 @@ public class ConfigManagerImpl implements ConfigManager {
 	}
 
 	@Override
+	/**
+	 * Fills Map cliParams with CLI arguments.
+	 */
 	public Map<String, String> processMainArgs(String[] mainArgs) {
 		Map<String,String> cliParams = new HashMap<>();
 		for(String arg:mainArgs){

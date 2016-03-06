@@ -1,5 +1,6 @@
 package rs.spaceinvade.pingagent.run;
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
@@ -16,10 +17,18 @@ import rs.spaceinvade.pingagent.utils.TestUtils;
 public class ConnectionSupervisorTest {
 
 	private static Logger logger = Logger.getLogger(ConnectionSupervisorTest.class.getName());
+	
+	private Agent pingAgent;
+	
+	@Before
+	public void setUp(){
+		pingAgent = mock(Agent.class);
+	}
 
 	@Test
 	public void callReportIfExceptionDuringCommand() throws Exception {
 		SimpleConnectionSupervisor connectionSupervisor = spy(SimpleConnectionSupervisor.class);
+		connectionSupervisor.setCallingAgent(pingAgent);
 		doThrow(new RuntimeException()).when(connectionSupervisor).sendInstruction();
 		connectionSupervisor.runCommand();
 		verify(connectionSupervisor).sendReport();

@@ -15,6 +15,8 @@ public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor
 
 	private Agent callingAgent;
 	
+	private String alias;
+	
 	SimpleConnectionSupervisor(){
 		
 	}
@@ -27,6 +29,7 @@ public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor
 	@Override
 	public void sendReport() {
 		logger.warning("Send report called !!");
+		getCallingAgent().report(getHost());
 	}
 
 	@Override
@@ -60,6 +63,14 @@ public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor
 		this.host = host;
 	}
 
+	/**
+	 * Executes needed steps to perform the ping:
+	 * <ul>
+	 * <li>call ping instruction</li>
+	 * <li>format result</li>
+	 * <li>record result</li>
+	 *  </ul>
+	 */
 	@Override
 	public void runCommand() {
 		try {
@@ -79,6 +90,12 @@ public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor
 	public abstract String formatResponse(BufferedReader bufferedReader) throws IOException;
 
 	public abstract void analyzeResponse(String response);
+
+
+	@Override
+	public String formatReportActivity() {
+		return getLastResult();
+	}
 	
 	@Override
 	public void run() {
@@ -87,6 +104,16 @@ public abstract class SimpleConnectionSupervisor implements ConnectionSupervisor
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
+	}
+	
+	@Override
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+	
+	@Override
+	public String getAlias() {
+		return alias;
 	}
 
 }

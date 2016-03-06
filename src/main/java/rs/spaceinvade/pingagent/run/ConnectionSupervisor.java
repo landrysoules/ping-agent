@@ -1,9 +1,7 @@
 package rs.spaceinvade.pingagent.run;
 
-import java.io.IOException;
-
 /**
- * In charge of executign pinging operations.
+ * In charge of executign pinging operations. Base interface for every supervisor, being a program launcher or a custom supervisor.
  * @author Landry Soules
  *
  */
@@ -30,10 +28,16 @@ public interface ConnectionSupervisor extends Runnable{
 
 	public Agent getCallingAgent();
 
-	void setCallingAgent(Agent callingAgent);
+	public void setCallingAgent(Agent callingAgent);
 
-	String getHost();
+	public String getHost();
 
-	void setHost(String host);
+	public void setHost(String host);
+	
+	public String formatReportActivity();
+	
+	public String getAlias();
+	
+	public void setAlias(String alias);
 	
 }

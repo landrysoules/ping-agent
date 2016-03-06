@@ -15,7 +15,7 @@ import rs.spaceinvade.pingagent.exception.PingAgentException;
 public interface ConfigManager {
 	
 	/**
-	 * Loads configuration.
+	 * Loads configuration from properties file as well as command line arguments.
 	 */
 	public void loadConfig()throws PingAgentException;
 	
