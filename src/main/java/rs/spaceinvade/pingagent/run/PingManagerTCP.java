@@ -4,54 +4,52 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
 public class PingManagerTCP extends SimpleConnectionSupervisor {
 
-	private static Logger log = Logger.getLogger(PingManagerTCP.class.getName());
+	private static Logger logger = Logger.getLogger(PingManagerTCP.class.getName());
 	
 	public PingManagerTCP(Agent callingAgent,String host) {
 		super(callingAgent,host);
 	}
 
 	@Override
-	public String runCommand() throws IOException {
-		try {
-			URL url = new URL("http://spaceinvade.rs");
+	public BufferedReader sendInstruction() throws Exception {
+		URL url = new URL("http://" + getHost());
 
-			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-			HttpURLConnection.setFollowRedirects(false);
-			huc.setConnectTimeout(5 * 1000);
-			huc.setRequestMethod("GET");
-			huc.setRequestProperty("User-Agent",
-					"Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
-			long startTime = System.currentTimeMillis();
-			huc.connect();
-			InputStream input = huc.getInputStream();
-			long timeElapsed = System.currentTimeMillis() - startTime;
-			log.info(""+huc.getResponseCode());
-			System.out.println("Time elapsed: " + timeElapsed);
-
-			BufferedReader br = new BufferedReader(new InputStreamReader(input));
-			String strTemp = "";
-			br.lines().forEach(System.out::println);
-			return br.toString();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpURLConnection.setFollowRedirects(false);
+		connection.setConnectTimeout(5 * 1000); //FIXME: parameterize
+		connection.setRequestMethod("GET");
+		connection.setRequestProperty("User-Agent",
+				"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36");
+		long startTime = System.currentTimeMillis();
+		connection.connect();
+		InputStream inputStream = connection.getInputStream();
+		long endTime = System.currentTimeMillis();
+		long timeElapsed = endTime - startTime;
+		String connectionSummary = connection.getResponseCode() + ":" + timeElapsed;
+		BufferedReader bufferedReader = new BufferedReader(new StringReader(connectionSummary)); //Here we could add page content from inputStream, but it's not currently needed.
+		return bufferedReader;
 		}
-		return null;
+
+	@Override
+	public String formatResponse(BufferedReader bufferedReader) throws IOException {
+		
+		String response = bufferedReader.readLine();
+		logger.warning(response);
+//		String formattedResponse = "Response code: "+ response[0] + "\nConnection time: " + response[1];
+		return response;
+	}
+
+	@Override
+	public void analyzeResponse(String response) {
+		// TODO Auto-generated method stub
+		
 	}
 	
-	@Override
-	public void run() {
-		try {
-			runCommand();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }

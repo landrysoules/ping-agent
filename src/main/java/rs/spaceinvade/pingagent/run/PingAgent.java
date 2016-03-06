@@ -42,15 +42,19 @@ public class PingAgent implements Agent {
 	@Override
 	public void launchAllProcesses() {
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(8);
-		int initialDelay = 2;
-		int period = 3;
+		int initialDelay = 0;
 		
-
 		String[]hosts = configManager.getProperties().getProperty("hosts").split(",");
 		for(String host:hosts){
 			ConnectionSupervisor pingManagerICMP = new PingManagerICMP(this, host);
-			executor.scheduleWithFixedDelay(pingManagerICMP, initialDelay, period, TimeUnit.SECONDS);
+			ConnectionSupervisor pingManagerTCP = new PingManagerTCP(this, host);
+			ConnectionSupervisor routeManager = new RouteManager(this, host);
+			executor.scheduleWithFixedDelay(pingManagerICMP, initialDelay, Long.parseLong(configManager.getProperties().getProperty("ping.icmp.interval")), TimeUnit.MILLISECONDS);
+			executor.scheduleWithFixedDelay(pingManagerTCP, initialDelay, Long.parseLong(configManager.getProperties().getProperty("ping.http.interval")), TimeUnit.MILLISECONDS);
+			executor.scheduleWithFixedDelay(routeManager, initialDelay, Long.parseLong(configManager.getProperties().getProperty("trace.interval")), TimeUnit.MILLISECONDS);
 			addSupervisor(pingManagerICMP);
+			addSupervisor(pingManagerTCP);
+			addSupervisor(routeManager);
 		}
 	}
 

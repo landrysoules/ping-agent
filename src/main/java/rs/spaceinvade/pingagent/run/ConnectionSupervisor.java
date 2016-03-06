@@ -12,8 +12,10 @@ public interface ConnectionSupervisor extends Runnable{
 	/**
 	 * Run ping command.
 	 */
-	public String runCommand() throws IOException;
+	public void runCommand();
 
+	
+	
 	/**
 	 * Store result of last operation.
 	 */
@@ -34,6 +36,4 @@ public interface ConnectionSupervisor extends Runnable{
 
 	void setHost(String host);
 	
-	
-
 }
